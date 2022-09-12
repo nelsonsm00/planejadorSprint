@@ -1,0 +1,408 @@
+/* FONTES */
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@200&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Nunito:wght@300&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Prompt:wght@300&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Questrial&display=swap");
+
+/************************************ BODY ***************************************/
+
+body {
+    background-color: #5e0083 !important;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
+        "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans",
+        "Helvetica Neue", sans-serif;
+    margin: 0;
+
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/************************************ CONTAINER ***************************************/
+.containerComponent {
+    background-color: #fff !important;
+    border-radius: 10px;
+    margin-top: 1%;
+    padding-top: 1%;
+    padding-bottom: 1%;
+    text-align: left;
+    width: 98%;
+}
+
+.rodape {
+    background-color: #ffa600;
+    text-align: right;
+    color: #000;
+    font-weight: bold;
+    position: fixed;
+    bottom: 0px;
+    width: 100%;
+}
+
+/************************************ NAV ****************************************/
+
+.nav-tabs {
+    font-family: Nunito;    
+}
+
+.nav-tabs .nav-link {
+    margin-right: 5px;
+    color: #000 !important;
+}
+
+#aba {
+    background-color: #5e0083;
+}
+
+#abaSelecionada {
+    background-color: #049ee7 !important;
+}
+
+#aba, #abaSelecionada {
+    border: #8f9193 solid 1px;
+    color: #000;
+}
+
+#abaDisable {
+    background-color: #d3dadd !important;
+}
+
+/************************************ BOTOES ******************************************/
+
+.btn {
+    width: 100%;
+    font-family: Prompt !important;
+}
+
+.btn-info {
+    background-color: #5e0083 !important;
+    font-weight: bold !important;
+    color: #ffa600 !important;
+    border: none !important;
+    width: 80% !important;
+}
+
+.btn-info:hover {
+    background-color: #320046 !important;
+}
+
+/************************************ TABELAS ****************************************/
+
+.table td,
+.table th {
+    vertical-align: middle !important;
+}
+
+thead th {
+    background-color: #5e0083 !important;
+    color: #ffa600;
+    text-align: center;
+    font-weight: bold;
+    font-family: Nunito;
+    font-size: 1.1rem;
+}
+
+tbody {
+    color: #000000;
+    font-weight: bold;
+    font-family: Montserrat !important;
+    text-align: center;
+}
+
+tbody tr:hover {
+    background-color: #5e0083 !important;
+    color: #ffffff !important;
+}
+
+td.btnSpace {
+    background-color: #ffffff;
+}
+
+th.btnSpace {
+    background-color: transparent !important;
+    border: none !important;
+}
+
+tr.negativo,
+tr.negativo:hover {
+    background-color: red !important;
+    color: #ffffff !important;
+}
+
+.tableTotal {
+    border: 0px !important;
+    max-width: calc(100% - 1px);
+}
+
+table {
+    border: none !important;
+}
+
+tbody, td, tfoot, th, thead, tr {
+    border-style: none !important;
+}
+
+/************************************ LABEL ****************************************/
+
+.labelCustom {
+    padding-top: 0.5em;
+}
+
+/* TABLET */
+@media (max-width: 1200px) {
+    .percentual {
+        padding-left: 0px !important;
+        max-width: 2.5% !important;
+    }
+}
+
+@media (min-width: 992px) {
+    .percentual {
+        padding-left: 0px !important;
+    }
+}
+
+/* DESK */
+@media (min-width: 576px) {
+    .percentual {
+        padding-left: 0px !important;
+    }
+}
+
+label {
+    color: #000000;
+    font-weight: bold;
+    font-family: Montserrat !important;
+}
+
+/* MOBILE */
+@media (max-width: 576px) {
+    label {
+        line-height: 2.5em !important;
+    }
+}
+
+.maximo {
+    color: red !important;
+    font-weight: bold !important;
+}
+
+/************************************ INPUT ***************************************/
+
+.inputHidden {
+    visibility: hidden;
+}
+
+.inputDado {
+    max-width: 100% !important;
+    padding-left: 0px !important;
+}
+
+input {
+    color: #5e0083 !important;
+    font-weight: bold !important;
+    font-family: Montserrat !important;
+}
+
+.inputMin {
+    text-align: center;
+}
+
+/* MOBILE */
+@media (max-width: 576px) {
+    .inputPercentual {
+        padding-top: 0.3em;
+    }
+}
+
+/* TABLET */
+@media (min-width: 992px) {
+    .inputPercentual {
+        max-width: 14% !important;
+    }
+}
+
+.buscar {
+    width: 83% !important;
+    margin-left: 2.5%;
+    margin-top: 0.5rem;
+}
+
+.textareaTermo {
+    max-width: 100% !important;
+    margin-left: 1rem;
+    margin-right: 1rem;
+    color: #1477b2 !important;
+    font-weight: bold !important;
+    font-family: Montserrat !important;
+    height: 500px !important;
+}
+
+.textareaCorpo {
+    max-width: 100% !important;
+    margin-left: 1rem;
+    margin-right: 1rem;
+    color: #1477b2 !important;
+    font-weight: bold !important;
+    font-family: Montserrat !important;
+    height: 100px !important;
+}
+
+.textareaObservacao {
+    max-width: 100% !important;
+    margin-left: 1rem;
+    margin-right: 1rem;
+    color: #1477b2 !important;
+    font-weight: bold !important;
+    font-family: Montserrat !important;
+    height: 150px !important; 
+}
+
+.input-group {
+    margin-left: 1rem;
+}
+
+.input-group-text {
+    background-color: #1477b2 !important;
+    color: #ffffff !important;
+    font-weight: bold !important;
+    font-family: Montserrat !important;
+}
+
+.react-datepicker-wrapper {
+    width: 100%;
+}
+
+.editor {
+    width: 100vw;
+    height: 50vh;
+}
+
+.editorBox {
+    background-color: #f5f5f5;
+}
+
+.formCheckPublic {
+    padding-top: .5rem;
+}
+
+/*********************************** SELECT ***************************************/
+
+.select {
+    color: #5e0083 !important;
+    font-weight: bold !important;
+    font-family: Montserrat !important;
+}
+
+.custom-select {
+    color: #1477b2 !important;
+    font-weight: bold !important;
+    font-family: Montserrat !important;
+}
+
+.selectOptions {
+    transform: rotate(90deg);
+    margin-left: 0px !important;
+    margin-top: 0px;
+}
+
+/************************************ ICONES **************************************/
+
+.editIcon {
+    color: rgb(226, 222, 0);
+}
+
+.deleteIcon {
+    color: rgb(112, 112, 112);
+}
+
+.addIcon {
+    color: rgb(37, 109, 37);
+}
+
+.addItem {
+    margin-top: -0.7rem;
+}
+
+.auxIcon {
+    color: #1477b2;
+    margin-left: 10px;
+}
+
+.searchIcon {
+    margin-top: 0.3rem
+}
+
+.auxArrow {
+    color: #000000;
+}
+
+.moveIcon {
+    color: #ffffff;
+    cursor: grabbing;
+}
+
+.crudIcon {
+    padding: 0px !important;
+}
+
+.orderAscClick {
+    background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAATCAYAAAByUDbMAAAAZ0lEQVQ4y2NgGLKgquEuFxBPAGI2ahhWCsS/gDibUoO0gPgxEP8H4ttArEyuQYxAPBdqEAxPBImTY5gjEL9DM+wTENuQahAvEO9DMwiGdwAxOymGJQLxTyD+jgWDxCMZRsEoGAVoAADeemwtPcZI2wAAAABJRU5ErkJggg==);
+    filter: grayscale(1) brightness(2);
+}
+
+.orderDescClick {
+    background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAATCAYAAAByUDbMAAAAZUlEQVQ4y2NgGAWjYBSggaqGu5FA/BOIv2PBIPFEUgxjB+IdQPwfC94HxLykus4GiD+hGfQOiB3J8SojEE9EM2wuSJzcsFMG4ttQgx4DsRalkZENxL+AuJQaMcsGxBOAmGvopk8AVz1sLZgg0bsAAAAASUVORK5CYII=);
+    filter: grayscale(1) brightness(2);
+}
+
+.orderDesc {
+    background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAATCAYAAAByUDbMAAAAZUlEQVQ4y2NgGAWjYBSggaqGu5FA/BOIv2PBIPFEUgxjB+IdQPwfC94HxLykus4GiD+hGfQOiB3J8SojEE9EM2wuSJzcsFMG4ttQgx4DsRalkZENxL+AuJQaMcsGxBOAmGvopk8AVz1sLZgg0bsAAAAASUVORK5CYII=);
+}
+
+th .order {
+    cursor: pointer;
+    background-position: right;
+    background-repeat: no-repeat;
+}
+
+/******************** COLUNA *******************/
+.divisao {
+    border-left: #5e0083 solid 5px;
+}
+
+/************************************ MODAL ***************************************/
+
+.modal-title {
+    font-family: Nunito;
+    width: 100%;
+}
+
+.modal-body {
+    color: #000;
+    font-family: Montserrat !important;
+    font-weight: bold;
+}
+
+.modal-80w {
+    max-width: 80% !important;
+}
+
+.modal-100w {
+    max-width: 100% !important;
+    margin: 0px !important;
+}
+
+/************************************ TITULO *************************************/
+
+.titleBox {
+    width: 100% !important;
+    background-color: #5e0083;
+    color: #ffa600;
+    padding: 10px;
+    padding-left: 20px;
+    margin-bottom: 2%;
+    font-size: 25px;
+    font-weight: bold;
+    font-family: Questrial;
+}
