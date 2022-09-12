@@ -1,4 +1,4 @@
-const CAPACIDADE = 64;
+import Calculadora from "../Calculadora/Calculadora";
 
 class Pessoa {
     constructor(nome, usuario) {
@@ -12,7 +12,7 @@ class Pessoa {
     }
 
     getSaldo() {
-        return CAPACIDADE - this.horasAlocadas;
+        return Calculadora.getCapacidade() - this.horasAlocadas;
     }
 
     alocaHora(hora) {

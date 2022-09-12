@@ -86,7 +86,7 @@ class EquipeForm extends Componente {
               return 0;
          });
         Cache.equipe.set(dados);
-        this.props.funcaoVoltar();
+        document.location.href = "/";
     }
 
     incluir() {

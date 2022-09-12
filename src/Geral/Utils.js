@@ -81,6 +81,36 @@ class Utils {
                     }
                 }
             }
+            else if (params.hasOwnProperty("gerenciamentoTempo")) {
+                if (params.hasOwnProperty("input")) {
+                    switch (tipo) {
+                        case "xs":
+                            return 6;
+                        case "sm":
+                            return 6;
+                        case "md":
+                            return 6;
+                        case "lg":
+                            return 6;
+                        case "xl":
+                            return 6;
+                    }
+                }
+                else if (params.hasOwnProperty("label")) {
+                    switch (tipo) {
+                        case "xs":
+                            return 6;
+                        case "sm":
+                            return 6;
+                        case "md":
+                            return 6;
+                        case "lg":
+                            return 6;
+                        case "xl":
+                            return 6;
+                    }
+                }
+            }
         }        
     }
 

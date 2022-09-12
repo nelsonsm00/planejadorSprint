@@ -48,7 +48,7 @@ class CalculadoraDevTesteForm extends Componente {
             this.equipeTeste = [];
     }
 
-    setRegistro(valor, propriedade) {
+    setRegistro(valor, propriedade, possuiTeste = false) {
         var json = {};
         var tempoDesenvolvimento = 0;
         var tempoTeste = 0;
@@ -58,7 +58,7 @@ class CalculadoraDevTesteForm extends Componente {
         if (propriedade == "tempoDesenvolvimento" || propriedade == "tempoTeste") {
             if (propriedade == "tempoDesenvolvimento") {
                 tempoDesenvolvimento = valor;
-                if (this.state.possuiTeste)
+                if (this.state.possuiTeste || possuiTeste)
                     tempoTeste = Calculadora.calculaTempoTeste(tempoDesenvolvimento);
                 else
                     tempoTeste = 0;
@@ -91,7 +91,7 @@ class CalculadoraDevTesteForm extends Componente {
         var possuiTeste = !this.state.possuiTeste;
         this.setState({possuiTeste: possuiTeste})
         if (possuiTeste)
-            this.setRegistro(this.state.registro.tempoDesenvolvimento, "tempoDesenvolvimento");
+            this.setRegistro(this.state.registro.tempoDesenvolvimento, "tempoDesenvolvimento", true);
         else {
             var json = {};
             Object.assign(json, this.state.registro);
@@ -116,10 +116,10 @@ class CalculadoraDevTesteForm extends Componente {
     }
 
     renderMaximoDesenvolvimento() {
-        if (this.state.registro.tempoDesenvolvimento > 45) {
+        if (this.state.registro.tempoDesenvolvimento > Calculadora.getTempoDesenvolvimento()) {
             return <Row>
                         <Label
-                            texto="Tempo máximo atingido (45h)!"
+                            texto={"Tempo máximo atingido (" + Calculadora.getTempoDesenvolvimento() + "h)!"}
                             classe="maximo"
                         />
                     </Row>
@@ -127,10 +127,10 @@ class CalculadoraDevTesteForm extends Componente {
     }
 
     renderMaximoTeste() {
-        if (this.state.registro.tempoTeste > 18) {
+        if (this.state.registro.tempoTeste > Calculadora.calculaTempoTeste(Calculadora.getTempoDesenvolvimento())) {
             return <Row>
                         <Label
-                            texto="Tempo máximo atingido (18h)!"
+                            texto={"Tempo máximo atingido (" + Calculadora.calculaTempoTeste(Calculadora.getTempoDesenvolvimento()) + "h)!"}
                             classe="maximo"
                         />
                     </Row>
@@ -138,10 +138,10 @@ class CalculadoraDevTesteForm extends Componente {
     }
 
     renderMaximoTotal() {
-        if (this.state.registro.tempoTotal > 64) {
+        if (this.state.registro.tempoTotal > Calculadora.getCapacidade()) {
             return <Row>
                         <Label
-                            texto="Tempo máximo atingido (64h)!"
+                            texto={"Tempo máximo atingido (" + Calculadora.getCapacidade() + "h)!"}
                             classe="maximo"
                         />
                     </Row>

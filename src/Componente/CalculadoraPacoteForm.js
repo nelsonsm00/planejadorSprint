@@ -91,7 +91,6 @@ class CalculadoraPacoteForm extends Componente {
         var possuiCompilacao = !this.state.possuiCompilacao;
         var json = {};
         Object.assign(json, this.state.registro);
-        json.tempoDesenvolvimento = possuiCompilacao ? Calculadora.getTempoRebase() : 0;
         json.tempoTotal = Calculadora.calculaTempoTotalPacote(this.state.possuiDocumentacao, possuiCompilacao);        
         this.setState({registro: json, possuiCompilacao: possuiCompilacao});  
     }

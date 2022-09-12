@@ -16,6 +16,7 @@ import Coluna from "../Geral/Coluna/Coluna";
 import ListaPessoa from "../Geral/Pessoa/ListaPessoa";
 import Cache from "../Geral/Cache/Cache";
 import PlanejamentoCapacidade from "../Geral/Relatorio/PlanejamentoCapacidade";
+import TempoModal from "./TempoModal";
 
 class CalculadoraForm extends Componente {
     constructor(props) {
@@ -38,6 +39,8 @@ class CalculadoraForm extends Componente {
         this.verificaSaldo = this.verificaSaldo.bind(this);
         this.abreConfiguracaoEquipe = this.abreConfiguracaoEquipe.bind(this);
         this.fechaConfiguracaoEquipe = this.fechaConfiguracaoEquipe.bind(this);
+        this.abreConfiguracaoTempo = this.abreConfiguracaoTempo.bind(this);
+        this.fechaConfiguracaoTempo = this.fechaConfiguracaoTempo.bind(this);
         this.abreImpressao = this.abreImpressao.bind(this);
         this.fechaImpressao = this.fechaImpressao.bind(this);
         this.imprime = this.imprime.bind(this);
@@ -88,6 +91,14 @@ class CalculadoraForm extends Componente {
         this.setState({showModal: false});
     }
 
+    abreConfiguracaoTempo() {
+        this.setState({showTempo: true});
+    }
+
+    fechaConfiguracaoTempo() {
+        this.setState({showTempo: false});
+    }
+
     abreImpressao() {
         this.setState({showImpressao: true});
     }
@@ -123,6 +134,7 @@ class CalculadoraForm extends Componente {
 
     render() {
         return (<>  
+            <TempoModal show={this.state.showTempo} onHide={this.fechaConfiguracaoTempo} />
             <EquipeModal show={this.state.showModal} onHide={this.fechaConfiguracaoEquipe} />  
             <ImpressaoModal 
                 show={this.state.showImpressao} 
@@ -142,6 +154,12 @@ class CalculadoraForm extends Componente {
                         <Row>
                             <center>
                                 <ButtonAux texto="Configurar equipe" valido={true} funcao={this.abreConfiguracaoEquipe}/>
+                            </center>
+                        </Row>
+                        <hr/>
+                        <Row>
+                            <center>
+                                <ButtonAux texto="Configurar tempo" valido={true} funcao={this.abreConfiguracaoTempo}/>
                             </center>
                         </Row>
                         <hr/>

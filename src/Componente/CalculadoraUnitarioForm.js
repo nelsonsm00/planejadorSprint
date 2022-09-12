@@ -66,10 +66,10 @@ class CalculadoraUnitarioForm extends Componente {
     }
 
     renderMaximoDesenvolvimento() {
-        if (this.state.registro.tempoDesenvolvimento > 64) {
+        if (this.state.registro.tempoDesenvolvimento > Calculadora.getCapacidade()) {
             return <Row>
                         <Label
-                            texto="Tempo máximo atingido (64h)!"
+                            texto={"Tempo máximo atingido (" + Calculadora.getCapacidade() + "h)!"}
                             classe="maximo"
                         />
                     </Row>
