@@ -6,16 +6,16 @@ import { Col, Row, Form, Container } from "react-bootstrap";
 /* IMPORT COMPONENTE */
 import Componente from "./Arquitetura/Componente";
 import CalculadoraTab from "./CalculadoraTab";
-import Input from "./UI/Input";
-import Label from "./UI/Label";
+import ImpressaoModal from "./ImpressaoModal";
 import Table from "./UI/Table";
 import ButtonAux from "./UI/Button/ButtonAux";
+import EquipeModal from "./EquipeModal";
 
 /* IMPORT GERAL */
 import Coluna from "../Geral/Coluna/Coluna";
 import ListaPessoa from "../Geral/Pessoa/ListaPessoa";
 import Cache from "../Geral/Cache/Cache";
-import EquipeModal from "./EquipeModal";
+import PlanejamentoCapacidade from "../Geral/Relatorio/PlanejamentoCapacidade";
 
 class CalculadoraForm extends Componente {
     constructor(props) {
@@ -31,11 +31,17 @@ class CalculadoraForm extends Componente {
         this.state.registro = new ListaPessoa();    
         this.state.dados = [];
         this.state.showModal = false;
+        this.state.showImpressao = false;
+        this.state.nomeSprint = "";
         this.adiciona = this.adiciona.bind(this);
         this.deleta = this.deleta.bind(this);
         this.verificaSaldo = this.verificaSaldo.bind(this);
         this.abreConfiguracaoEquipe = this.abreConfiguracaoEquipe.bind(this);
         this.fechaConfiguracaoEquipe = this.fechaConfiguracaoEquipe.bind(this);
+        this.abreImpressao = this.abreImpressao.bind(this);
+        this.fechaImpressao = this.fechaImpressao.bind(this);
+        this.imprime = this.imprime.bind(this);
+        this.setNomeSprint = this.setNomeSprint.bind(this);
     }
 
     adiciona(registro) {
@@ -80,7 +86,26 @@ class CalculadoraForm extends Componente {
 
     fechaConfiguracaoEquipe() {
         this.setState({showModal: false});
-        document.location.href = "/";
+    }
+
+    abreImpressao() {
+        this.setState({showImpressao: true});
+    }
+
+    fechaImpressao() {
+        this.setState({showImpressao: false});
+    }
+
+    setNomeSprint(valor) {
+        this.setState({nomeSprint: valor});
+    }
+
+    imprime() {
+        PlanejamentoCapacidade.imprime(this.state.nomeSprint, 
+            this.colunas, 
+            this.state.registro.getJson(), 
+            this.colunasDemanda, 
+            this.state.dados);                          
     }
 
     carregaPessoas() {
@@ -99,17 +124,30 @@ class CalculadoraForm extends Componente {
     render() {
         return (<>  
             <EquipeModal show={this.state.showModal} onHide={this.fechaConfiguracaoEquipe} />  
+            <ImpressaoModal 
+                show={this.state.showImpressao} 
+                onHide={this.fechaImpressao}
+                funcao={this.imprime}
+                funcaoSecundaria={this.setNomeSprint}
+                valor={this.state.nomeSprint}
+            />
             <Container>
                 <Col sm={12}>
                 <Row>
                     <Col sm={4}> 
                         <Row>   
-                            <Table dados={this.state.registro.getJson()} colunas={this.colunas} funcaoNegativo={this.verificaSaldo}/>
+                            <Table id="capacidadeResponsavel" dados={this.state.registro.getJson()} colunas={this.colunas} funcaoNegativo={this.verificaSaldo}/>
                         </Row>
                         <hr/>
                         <Row>
                             <center>
                                 <ButtonAux texto="Configurar equipe" valido={true} funcao={this.abreConfiguracaoEquipe}/>
+                            </center>
+                        </Row>
+                        <hr/>
+                        <Row>
+                            <center>
+                                <ButtonAux texto="Imprimir" valido={true} funcao={this.abreImpressao}/>
                             </center>
                         </Row>
                     </Col>
@@ -120,7 +158,7 @@ class CalculadoraForm extends Componente {
                 <hr/>
                 <Row>
                     <Col sm={12}>
-                        <Table dados={this.state.dados} colunas={this.colunasDemanda} funcao={this.deleta} />
+                        <Table id="demandas" dados={this.state.dados} colunas={this.colunasDemanda} funcao={this.deleta} />
                     </Col>    
                 </Row>
                 </Col>

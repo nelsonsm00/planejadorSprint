@@ -3,12 +3,13 @@ import { Table } from "reactstrap";
 import IconDelete from "./Icon/IconDelete";
 
 export default (p) => { 
+    var id = p.id;
     var colunas = p.colunas;
     var dados = p.dados;
     var funcao = p.hasOwnProperty("funcao") ? p.funcao : () => {};
     var funcaoNegativo = p.hasOwnProperty("funcaoNegativo") ? p.funcaoNegativo : () => {};
     return (
-                <Table bordered className="tableListagemSimulacao">
+                <Table id={id} bordered className="tableListagemSimulacao">
                     <thead>
                         <tr>
                             {colunas.map((c) => (<th width={c.largura + "%"}>{c.texto}</th>))}
