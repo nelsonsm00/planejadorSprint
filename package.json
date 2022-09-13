@@ -2,6 +2,7 @@
   "name": "planejadorsprint",
   "version": "0.1.0",
   "private": true,
+  "homepage": "http://apolloapp01.brazilsouth.cloudapp.azure.com:5020/planejadorsprint/",
   "dependencies": {
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",

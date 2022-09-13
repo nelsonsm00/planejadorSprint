@@ -1,10 +1,10 @@
 {
   "files": {
-    "main.css": "/static/css/main.67433b5f.css",
-    "main.js": "/static/js/main.2fa44ebb.js",
-    "index.html": "/index.html",
-    "main.67433b5f.css.map": "/static/css/main.67433b5f.css.map",
-    "main.2fa44ebb.js.map": "/static/js/main.2fa44ebb.js.map"
+    "main.css": "/planejadorsprint/static/css/main.67433b5f.css",
+    "main.js": "/planejadorsprint/static/js/main.2fa44ebb.js",
+    "index.html": "/planejadorsprint/index.html",
+    "main.67433b5f.css.map": "/planejadorsprint/static/css/main.67433b5f.css.map",
+    "main.2fa44ebb.js.map": "/planejadorsprint/static/js/main.2fa44ebb.js.map"
   },
   "entrypoints": [
     "static/css/main.67433b5f.css",
