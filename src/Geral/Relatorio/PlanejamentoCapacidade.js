@@ -1,3 +1,5 @@
+import ComponenteEnum from "../Enum/ComponenteEnum";
+
 class PlanejamentoCapacidade {
     static imprime(nomeSprint, colunasCapacidade, dadosCapacidade, colunasDemanda, dadosDemanda) {
         var titulo = "<h1>Sprint " + nomeSprint + "</h1>";
@@ -24,13 +26,35 @@ class PlanejamentoCapacidade {
 
     static getTabela(colunas, dados) {
         var tabela = "<table class=\"\"><thead><tr>";
-        colunas.map((c) => (tabela += (c.colunaBotao ? "" : "<th width=" + c.largura + "%>" + c.texto + "</th>")));
+        colunas.map((c) => (tabela += ( c.componente == ComponenteEnum.Button ||
+                                        c.componente == ComponenteEnum.ButtonAddDelete ||
+                                        c.componente == ComponenteEnum.ButtonCRUD ||
+                                        c.componente == ComponenteEnum.ButtonEditDelete
+                                        ? "" : "<th width=" + c.largura + "%>" + c.texto + "</th>")));
         tabela += "</tr></thead><tbody>";
         for(var i = 0; i < dados.length; i++) {
+            var d = dados[i];
             tabela += "<tr>";
             for(var j = 0; j < colunas.length; j++) {
-                if (!colunas[j].colunaBotao) {
-                    tabela += "<td>" + dados[i][colunas[j].chave] + "</td>";
+                var c = colunas[j];
+                var colunaBotao =   c.componente == ComponenteEnum.Button ||
+                                    c.componente  == ComponenteEnum.ButtonAddDelete ||
+                                    c.componente == ComponenteEnum.ButtonCRUD ||
+                                    c.componente == ComponenteEnum.ButtonEditDelete;
+                if (!colunaBotao) {
+                    if (c.subDados.length > 0 && c.subChave != "") {
+                        for(var k = 0; k < c.subDados.length; k++) {
+                            var subDados = c.subDados[k];
+                            var chaves = c.subChave.split(";");
+                            if (subDados[chaves[0]] == d[c.chave]) {
+                                tabela += "<td>" + subDados[chaves[1]] + "</td>";
+                                break;
+                            }
+                        }
+                    }
+                    else {
+                        tabela += "<td>" + d[c.chave] + "</td>";
+                    }
                 }
             }
             tabela += "</tr>";

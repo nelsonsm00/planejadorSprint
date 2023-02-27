@@ -1,5 +1,19 @@
 class Cache {
 
+    static idSquadSelecionada = {
+        set: (value) => {
+            localStorage.setItem("idSquadSelecionada", value);
+        },
+        get: localStorage.getItem("idSquadSelecionada")
+    };
+
+    static squads = {
+        set: (value) => {
+            localStorage.setItem("squads", JSON.stringify(value));
+        },
+        get: JSON.parse(localStorage.getItem("squads"))
+    };
+
     static equipe = {
         set: (value) => {
             localStorage.setItem("equipe", JSON.stringify(value));

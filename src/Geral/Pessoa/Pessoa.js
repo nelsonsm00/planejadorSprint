@@ -1,10 +1,10 @@
 import Calculadora from "../Calculadora/Calculadora";
 
 class Pessoa {
-    constructor(nome, usuario) {
+    constructor(nome, usuario, horas = 0) {
         this.nome = nome;
         this.usuario = usuario;
-        this.horasAlocadas = 0;
+        this.horasAlocadas = horas;
     }
 
     getJson() {
@@ -21,6 +21,10 @@ class Pessoa {
 
     desalocaHora(hora) {
         this.horasAlocadas -= hora;
+    }
+
+    static getChaveSelect() {
+        return {value: "usuario", text: "nome"};
     }
 }
 

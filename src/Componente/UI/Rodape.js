@@ -6,7 +6,7 @@ export default () => {
         <>
             <br />
             <br />
-            <div className="rodape">PLANEJADOR DE SPRINT - 2022</div>
+            <div className="rodape">PLANEJADOR DE SPRINT - 2023</div>
         </>
     );
 };

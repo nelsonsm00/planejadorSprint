@@ -1,8 +1,8 @@
 import Cache from "../Cache/Cache";
 import MascaraNumerica from "../MascaraNumerica";
+import TipoDemanda from "../TipoDemanda/TipoDemanda";
 
-/* CLASSE RESPONSAVEL POR REALIZAR O CALCULO DAS HORAS
- */
+/* CLASSE RESPONSAVEL POR REALIZAR O CALCULO DAS HORAS */
 const TEMPO_COMPILACAO = 1;
 const TEMPO_DOCUMENTACAO = 18;
 const TEMPO_REBASE = 2;
@@ -13,30 +13,46 @@ const CAPACIDADE = 64;
 
 class Calculadora {   
 
-    //TESTE É 40% DO TEMPO DE DESENVOLVIMENTO
+    static getDadosTempoSquad() {
+        var idSquadSelecionada = Cache.idSquadSelecionada.get;
+        if (idSquadSelecionada == null || idSquadSelecionada == undefined)
+            idSquadSelecionada = 0;
+        else
+            idSquadSelecionada = parseInt(idSquadSelecionada);
+
+        var squads = Cache.squads.get;
+        if (squads == null || squads == undefined || squads.length == 0) {
+            console.log("SEM SQUADS CADASTRADAS");
+            return {};
+        }
+        
+        return squads[idSquadSelecionada].tempo;
+    }
+
+    //TESTE É % DO TEMPO DE DESENVOLVIMENTO
     static calculaTempoTeste(tempoDesenvolvimento) {
-        return (tempoDesenvolvimento * Calculadora.getTempoTeste());
+        return Math.round(tempoDesenvolvimento * Calculadora.getTempoTeste());
     }
 
     //O TOTAL DO DESENVOLVIMENTO É D + C + t
     static calculaTempoTotalDevTeste(tempoDesenvolvimento, tempoTeste, utilizaTempoCompilacao) {
         var tempoCompilacao = utilizaTempoCompilacao ? Calculadora.getTempoCompilacao() : 0;        
-        return tempoDesenvolvimento + tempoCompilacao + tempoTeste;
+        return Math.round(tempoDesenvolvimento + tempoCompilacao + tempoTeste);
     }
 
     static calculaTempoTotalPacote(utilizaTempoDocumentacao, utilizaTempoCompilacao) {
         var tempoCompilacao = utilizaTempoCompilacao ? Calculadora.getTempoCompilacao() : 0; 
         var tempoDocumentacao = utilizaTempoDocumentacao ? Calculadora.getTempoDocumentacao() : 0; 
-        return tempoDocumentacao + Calculadora.getTempoRebase() + tempoCompilacao;
+        return Math.round(tempoDocumentacao + Calculadora.getTempoRebase() + tempoCompilacao);
     }
 
     static calculaTempoValidacao(utilizaTempoPiloto) {
         var tempoPiloto = utilizaTempoPiloto ? Calculadora.getTempoPiloto() : 0;
-        return tempoPiloto + Calculadora.getTempoDeploy();
+        return Math.round(tempoPiloto + Calculadora.getTempoDeploy());
     }
 
     static getTempoTeste() {
-        var t = Cache.tempoTeste.get;
+        var t = Calculadora.getDadosTempoSquad().tempoTeste;
         if (t == undefined || !MascaraNumerica.isNumeric(t))
             return TEMPO_TESTE;
         else
@@ -44,7 +60,7 @@ class Calculadora {
     }
 
     static getTempoDocumentacao() {
-        var t = Cache.tempoDocumentacao.get;
+        var t = Calculadora.getDadosTempoSquad().tempoDocumentacao;
         if (t == undefined || !MascaraNumerica.isNumeric(t))
             return TEMPO_DOCUMENTACAO;
         else
@@ -52,7 +68,7 @@ class Calculadora {
     }
     
     static getTempoRebase() {
-        var t = Cache.tempoRebase.get;
+        var t = Calculadora.getDadosTempoSquad().tempoRebase;
         if (t == undefined || !MascaraNumerica.isNumeric(t))
             return TEMPO_REBASE;
         else
@@ -60,7 +76,7 @@ class Calculadora {
     }
 
     static getTempoPiloto() {
-        var t = Cache.tempoPiloto.get;
+        var t = Calculadora.getDadosTempoSquad().tempoPiloto;
         if (t == undefined || !MascaraNumerica.isNumeric(t))
             return TEMPO_PILOTO;
         else
@@ -68,7 +84,7 @@ class Calculadora {
     }
 
     static getTempoDeploy() {
-        var t = Cache.tempoDeploy.get;
+        var t = Calculadora.getDadosTempoSquad().tempoDeploy;
         if (t == undefined || !MascaraNumerica.isNumeric(t))
             return TEMPO_DEPLOY;
         else
@@ -76,7 +92,7 @@ class Calculadora {
     }  
 
     static getTempoCompilacao() {
-        var t = Cache.tempoCompilacao.get;
+        var t = Calculadora.getDadosTempoSquad().tempoCompilacao;
         if (t == undefined || !MascaraNumerica.isNumeric(t))
             return TEMPO_COMPILACAO;
         else
@@ -84,7 +100,7 @@ class Calculadora {
     }  
 
     static getCapacidade() {
-        var t = Cache.capacidade.get;
+        var t = Calculadora.getDadosTempoSquad().capacidade;
         if (t == undefined || !MascaraNumerica.isNumeric(t))
             return CAPACIDADE;
         else
@@ -95,7 +111,45 @@ class Calculadora {
         var capacidade = Calculadora.getCapacidade();
         var teste = Calculadora.getTempoTeste();
         var compilacao = Calculadora.getTempoCompilacao();
-        return ((capacidade - compilacao) / (1 + teste));
+        return Math.round((capacidade - compilacao) / (1 + teste));
+    }
+
+    static getEstimativaDesenvolvimentoMaior(subtask, tempo = 0, t = null, agrupaTipo = true, indexEdicao = -1) {
+        if (subtask.length > 0) {
+            if (agrupaTipo) {
+                var maior = 0;
+                TipoDemanda.getTipos().forEach(tipo => {
+                    if (TipoDemanda.isDesenvolvimento(tipo.id)) {
+                        var agrupamento = subtask.filter((s, index) => {return tipo.id == s.tipo && index != indexEdicao});
+                        var total = 0;
+                        for (var i = 0; i < agrupamento.length; i++) {
+                            total += agrupamento[i].tempo;
+                        }
+
+                        if (TipoDemanda.isValido(t) && t == tipo.id) {
+                            total += tempo;
+                        }
+
+                        if (maior < total)
+                            maior = total;
+                    }
+                });
+                return maior;
+            }
+            else {
+                var maior = subtask[0];
+                for (var i = 0; i < subtask.length; i++) {
+                    if (i != indexEdicao && maior < subtask[i].tempo)
+                        maior = subtask[i].tempo;
+                }
+                if (maior < tempo)
+                    return tempo;
+                else
+                    return maior;
+            }
+        }
+        else
+            return tempo;
     }
 }
 

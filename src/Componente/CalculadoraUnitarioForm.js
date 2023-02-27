@@ -1,72 +1,65 @@
 /* IMPORT REACT */
-import { Component } from "react";
-import { Col, Row, Form, Container } from "react-bootstrap";
-import FormCheck from 'react-bootstrap/FormCheck'
-
+import { Col, Row, Container } from "react-bootstrap";
 
 /* IMPORT COMPONENTE */
+import ButtonSuccess from "./UI/Button/ButtonSuccess";
 import Componente from "./Arquitetura/Componente";
 import Input from "./UI/Input";
 import Label from "./UI/Label";
 import Select from "./UI/Select";
-import ButtonSuccess from "./UI/Button/ButtonSuccess";
 
 /* IMPORT GERAL */
 import Cache from "../Geral/Cache/Cache";
 import Calculadora from "../Geral/Calculadora/Calculadora";
+import Pessoa from "../Geral/Pessoa/Pessoa";
 
 class CalculadoraUnitarioForm extends Componente {   
     constructor(props) {
-        super(props);             
+        super(props);    
         this.state.registro = this.getRegistroPadrao();
-        this.equipeDesenvolvimento = Cache.equipe.get;
 
         this.populaEquipe();
 
         this.setRegistro = this.setRegistro.bind(this);
-        this.setResponsavelDesenvolvimento = this.setResponsavelDesenvolvimento.bind(this);
+        this.setResponsavel = this.setResponsavel.bind(this);
         this.executaFuncao = this.executaFuncao.bind(this);
     }
 
     getRegistroPadrao() {
         return {demanda: "AUTO-", 
-                tempoDesenvolvimento: 0, 
-                tempoTeste: 0, 
+                tempo: 0, 
                 tempoTotal: 0, 
-                responsavelDesenvolvimento: null, 
-                responsavelTeste: null
+                responsavel: null
             };
     }
 
     populaEquipe() {
-        if (this.equipeDesenvolvimento == null || this.equipeDesenvolvimento == undefined)
-           this.equipeDesenvolvimento = [];
+        if (this.equipe == null || this.equipe == undefined)
+           this.equipe = [];
     }
 
     setRegistro(valor, propriedade) {
         var json = {};
-        var tempoDesenvolvimento = 0;
         Object.assign(json, this.state.registro);
-        json[propriedade] = valor;
-        
-        if (propriedade == "tempoDesenvolvimento") {
+        json[propriedade] = valor;        
+        if (propriedade == "tempo") {
             json.tempoTotal = valor;
         }        
         this.setState({registro: json});
     }
 
-    setResponsavelDesenvolvimento(responsavel) {
-        if (responsavel == undefined) this.setRegistro(null, "responsavelDesenvolvimento");
-        else this.setRegistro(responsavel.usuario, "responsavelDesenvolvimento");
+    setResponsavel(responsavel) {
+        if (responsavel == undefined) this.setRegistro(null, "responsavel");
+        else this.setRegistro(responsavel.usuario, "responsavel");
     }
 
     executaFuncao() {
         this.props.funcao(this.state.registro);
-        this.setState({registro: this.getRegistroPadrao(), possuiPiloto: true});
+        this.setState({registro: this.getRegistroPadrao()});
     }
 
     renderMaximoDesenvolvimento() {
-        if (this.state.registro.tempoDesenvolvimento > Calculadora.getCapacidade()) {
+        if (this.state.registro.tempo > Calculadora.getCapacidade()) {
             return <Row>
                         <Label
                             texto={"Tempo máximo atingido (" + Calculadora.getCapacidade() + "h)!"}
@@ -108,10 +101,10 @@ class CalculadoraUnitarioForm extends Componente {
                             />
                             <Input
                                 ativo={true}
-                                valor={this.state.registro.tempoDesenvolvimento} 
+                                valor={this.state.registro.tempo} 
                                 parametrosTamanho={input}
                                 funcao={this.setRegistro}
-                                parametrosFuncao="tempoDesenvolvimento"
+                                parametrosFuncao="tempo"
                             />                            
                         </Row>
                         {this.renderMaximoDesenvolvimento()}                        
@@ -123,9 +116,10 @@ class CalculadoraUnitarioForm extends Componente {
                             />                
                             <Select 
                                 parametrosTamanho={input} 
-                                dados={this.equipeDesenvolvimento} 
-                                funcao={this.setResponsavelDesenvolvimento}
-                                valor={this.state.registro.responsavelDesenvolvimento}
+                                dados={this.equipe} 
+                                funcao={this.setResponsavel}
+                                valor={this.state.registro.responsavel}
+                                chave={Pessoa.getChaveSelect()}
                             />               
                         </Row>
                         <hr />
@@ -146,7 +140,7 @@ class CalculadoraUnitarioForm extends Componente {
                 <Row>
                     <Col sm="10"></Col>
                     <Col sm="2">
-                        <ButtonSuccess valido={this.state.registro.responsavelDesenvolvimento != null} texto={"Adicionar"} funcao={this.executaFuncao}/>
+                        <ButtonSuccess valido={this.state.registro.responsavel != null} texto={"Adicionar"} funcao={this.executaFuncao}/>
                     </Col>
                 </Row>
             </Container>        

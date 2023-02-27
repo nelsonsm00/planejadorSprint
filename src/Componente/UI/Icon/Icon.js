@@ -29,7 +29,10 @@ class Icon extends Component {
         var parametros = this.getParametrosFuncao();
         if (Utils.isEmptyObject(parametros)) {
             this.funcao();
-        } else {
+        } else if (parametros.hasOwnProperty("valor") && parametros.valor) {
+            this.funcao(null, parametros);
+        }
+        else {
             this.funcao(parametros);
         }
     }

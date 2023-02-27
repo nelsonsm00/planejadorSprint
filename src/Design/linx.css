@@ -39,6 +39,15 @@ body {
     width: 100%;
 }
 
+.fullScreen {
+    max-width: 100% !important;
+    width: 100% !important;
+}
+
+.ultimaLinha {
+
+}
+
 /************************************ NAV ****************************************/
 
 .nav-tabs {
@@ -317,7 +326,7 @@ input {
 }
 
 .addIcon {
-    color: rgb(37, 109, 37);
+    color: rgb(255, 255, 255);
 }
 
 .addItem {
@@ -390,6 +399,7 @@ th .order {
 
 .modal-100w {
     max-width: 100% !important;
+    min-height: 100% !important;
     margin: 0px !important;
 }
 

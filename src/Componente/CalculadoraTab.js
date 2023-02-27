@@ -10,10 +10,12 @@ import CalculadoraDevTesteForm from "./CalculadoraDevTesteForm";
 import CalculadoraPacoteForm from "./CalculadoraPacoteForm";
 import CalculadoraValidacaoForm from "./CalculadoraValidacaoForm";
 import CalculadoraUnitarioForm from "./CalculadoraUnitarioForm";
+import CalculadoraDevTesteSubTaskForm from "./Calculadora/CalculadoraDevTesteSubTaskForm";
+import CalculadoraDemandaPaiForm from "./Calculadora/CalculadoraDemandaPaiForm";
 
 class CalculadoraTab extends Componente {
     constructor(props) {
-        super(props);        
+        super(props); 
         this.tabs = {
             devTeste: new Aba("Desenvolvimento/Teste"),
             pacote: new Aba("Pacote"),
@@ -46,14 +48,16 @@ class CalculadoraTab extends Componente {
                     className={this.isAbaSelecionada(this.tabs.devTeste.chave)}
                 >                    
                     <br/>
-                    <CalculadoraDevTesteForm funcao={this.props.funcao}/>
+                    {this.squadUsaSubtask ? 
+                        <CalculadoraDemandaPaiForm funcao={this.props.funcao}/> : 
+                        <CalculadoraDevTesteForm funcao={this.props.funcao}/>
+                    }
                 </Tab>
                 <Tab
                     eventKey={this.tabs.pacote.chave}
                     title={this.tabs.pacote.titulo}
                     className={this.isAbaSelecionada(this.tabs.pacote.chave)}
-                >
-                    <br/>
+                >                    <br/>
                     <CalculadoraPacoteForm funcao={this.props.funcao}/>
                 </Tab>
                 <Tab

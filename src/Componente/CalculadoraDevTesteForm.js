@@ -14,6 +14,7 @@ import ButtonSuccess from "./UI/Button/ButtonSuccess";
 /* IMPORT GERAL */
 import Cache from "../Geral/Cache/Cache";
 import Calculadora from "../Geral/Calculadora/Calculadora";
+import Pessoa from "../Geral/Pessoa/Pessoa";
 
 class CalculadoraDevTesteForm extends Componente {   
     constructor(props) {
@@ -214,6 +215,7 @@ class CalculadoraDevTesteForm extends Componente {
                                 dados={this.equipeDesenvolvimento} 
                                 funcao={this.setResponsavelDesenvolvimento}
                                 valor={this.state.registro.responsavelDesenvolvimento}
+                                chave={Pessoa.getChaveSelect()}
                             />               
                         </Row>
                         <hr />
@@ -243,6 +245,7 @@ class CalculadoraDevTesteForm extends Componente {
                                 dados={this.equipeTeste} 
                                 funcao={this.setResponsavelTeste}
                                 valor={this.state.registro.responsavelTeste}
+                                chave={Pessoa.getChaveSelect}
                             />                    
                         </Row>
                         <hr />

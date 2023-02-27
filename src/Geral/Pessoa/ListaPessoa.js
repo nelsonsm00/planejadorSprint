@@ -3,17 +3,23 @@ import Pessoa from "./Pessoa";
 const CAPACIDADE = 64;
 
 class ListaPessoa {
-    constructor() {
+    constructor(json = null) {
         this.pessoas = [];
-    }
+        if (json != null) {
+            if (json.hasOwnProperty("pessoas"))
+                json.pessoas.map((p) => this.add(p.nome, p.usuario, p.horasAlocadas));
+            else
+                json.map((p) => this.add(p.nome, p.usuario, p.horasAlocadas));
+        }            
+    }   
 
     addPessoa(pessoa) {
         if (this.pessoas.length == 0 || this.pessoas.find((p) => (p.usuario == pessoa.usuario)) == undefined)
             this.pessoas.push(pessoa);
     }
 
-    add(nome, usuario) {
-        var pessoa = new Pessoa(nome, usuario);
+    add(nome, usuario, horas = 0) {
+        var pessoa = new Pessoa(nome, usuario, horas);
         this.addPessoa(pessoa);
     }
 

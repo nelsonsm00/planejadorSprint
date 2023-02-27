@@ -1,44 +1,51 @@
 /* IMPORT REACT */
-import { Component } from "react";
 import { Col, Row, Form, Container } from "react-bootstrap";
 import FormCheck from 'react-bootstrap/FormCheck'
 
-
 /* IMPORT COMPONENTE */
+import ButtonSuccess from "./UI/Button/ButtonSuccess";
 import Componente from "./Arquitetura/Componente";
 import Input from "./UI/Input";
 import Label from "./UI/Label";
 import Select from "./UI/Select";
-import ButtonSuccess from "./UI/Button/ButtonSuccess";
 
 /* IMPORT GERAL */
-import Cache from "../Geral/Cache/Cache";
 import Calculadora from "../Geral/Calculadora/Calculadora";
+import Pessoa from "../Geral/Pessoa/Pessoa";
+
+/* PROPRIEDADES */
+const P_DEMANDA_DEPLOY = "demandaDeploy";
+const P_RESPONSAVEL_DEPLOY = "responsavelDeploy";
+const P_TEMPO_DEPLOY = "tempoDeploy";
+const P_DEMANDA_PILOTO = "demandaPiloto";
+const P_RESPONSAVEL_PILOTO = "responsavelPiloto";
+const P_TEMPO_PILOTO = "tempoPiloto";
+const P_TEMPO_TOTAL = "tempoTotal";
 
 class CalculadoraValidacaoForm extends Componente {   
     constructor(props) {
-        super(props);             
+        super(props);            
         this.state.registro = this.getRegistroPadrao();
         this.state.possuiPiloto = true;
-        this.equipeDesenvolvimento = Cache.equipe.get;
-        this.equipeTeste = Cache.equipe.get;
 
         this.populaEquipe();
 
-        this.setDemanda = this.setDemanda.bind(this);
-        this.setResponsavelDesenvolvimento = this.setResponsavelDesenvolvimento.bind(this);
-        this.setResponsavelTeste = this.setResponsavelTeste.bind(this);
+        this.setRegistro = this.setRegistro.bind(this);
+        this.setResponsavelDeploy = this.setResponsavelDeploy.bind(this);
+        this.setResponsavelPiloto = this.setResponsavelPiloto.bind(this);
         this.executaFuncao = this.executaFuncao.bind(this);
     }
 
     getRegistroPadrao() {
-        return {demanda: "AUTO-", 
-                tempoDesenvolvimento: Calculadora.getTempoDeploy(), 
-                tempoTeste: Calculadora.getTempoPiloto(), 
-                tempoTotal: Calculadora.calculaTempoValidacao(true), 
-                responsavelDesenvolvimento: null, 
-                responsavelTeste: null
-            };
+        return {
+            demandaDeploy: "AUTO-", 
+            tempoDeploy: Calculadora.getTempoDeploy(),
+            responsavelDeploy: null,
+            demandaPiloto: "AUTO-",                 
+            tempoPiloto: Calculadora.getTempoPiloto(true), 
+            responsavelPiloto: null,
+            tempoTotal: Calculadora.calculaTempoValidacao(true)               
+        };
     }
 
     populaEquipe() {
@@ -47,42 +54,36 @@ class CalculadoraValidacaoForm extends Componente {
         else
             this.equipeDesenvolvimento = [];
 
-        if (this.equipeTeste != null && this.equipeTeste != undefined)
-            this.equipeTeste = this.equipeTeste.filter((e) => {return e.piloto});
+        if (this.equipePiloto != null && this.equipePiloto != undefined)
+            this.equipePiloto = this.equipePiloto.filter((e) => {return e.piloto});
         else
-            this.equipeTeste = [];
+            this.equipePiloto = [];
     }
 
-    setDemanda(demanda) {
+    setRegistro(valor, propriedade) {
         var json = {};
         Object.assign(json, this.state.registro);
-        json.demanda = demanda;
+        json[propriedade] = valor;
         this.setState({registro: json});
     }
 
-    setResponsavelDesenvolvimento(responsavel) {
-        if (responsavel == undefined) responsavel = {usuario: null};
-        var json = {};
-        Object.assign(json, this.state.registro);
-        json.responsavelDesenvolvimento = responsavel.usuario;
-        this.setState({registro: json});
+    setResponsavelDeploy(responsavel) {
+        if (responsavel == undefined) this.setRegistro(null, P_RESPONSAVEL_DEPLOY);
+        else this.setRegistro(responsavel.usuario, P_RESPONSAVEL_DEPLOY);
     }
 
-    setResponsavelTeste(responsavel) {
-        if (responsavel == undefined) responsavel = {usuario: null};
-        var json = {};
-        Object.assign(json, this.state.registro);
-        json.responsavelTeste = responsavel.usuario
-        this.setState({registro: json});
+    setResponsavelPiloto(responsavel) {
+        if (responsavel == undefined) this.setRegistro(null, P_RESPONSAVEL_PILOTO);
+        else this.setRegistro(responsavel.usuario, P_RESPONSAVEL_PILOTO);
     }
 
     setPossuiPiloto() {
         var possuiPiloto = !this.state.possuiPiloto;
         var json = {};
         Object.assign(json, this.state.registro);
-        json.responsavelTeste = null;
-        json.tempoTeste = possuiPiloto ? Calculadora.getTempoPiloto() : 0;
-        json.tempoTotal = Calculadora.calculaTempoValidacao(possuiPiloto);        
+        json[P_RESPONSAVEL_PILOTO] = null;
+        json[P_TEMPO_PILOTO] = possuiPiloto ? Calculadora.getTempoPiloto() : 0;
+        json[P_TEMPO_TOTAL] = Calculadora.calculaTempoValidacao(possuiPiloto);        
         this.setState({registro: json, possuiPiloto: possuiPiloto});
     }
 
@@ -112,42 +113,17 @@ class CalculadoraValidacaoForm extends Componente {
                     <Col sm={8}>
                         <Row>
                             <Label
-                                texto="Demanda:"
+                                texto={this.squadUsaSubtask ? "Demanda deploy:" : "Demanda:"}
                                 parametrosTamanho={label}
                             />
                             <Input
                                 ativo={true}
-                                valor={this.state.registro.demanda} 
+                                valor={this.state.registro.demandaDeploy} 
                                 parametrosTamanho={input}
                                 inputTexto={true}
-                                funcao={this.setDemanda}
+                                funcao={this.setRegistro}
+                                parametrosFuncao={P_DEMANDA_DEPLOY}
                             />
-                        </Row>
-                        <hr />
-                        <Row>
-                            <Label
-                                texto="Tempo Piloto (h):"
-                                parametrosTamanho={label}
-                            />
-                            <Input
-                                ativo={false}
-                                valor={this.state.registro.tempoTeste} 
-                                parametrosTamanho={input}
-                            />                            
-                        </Row>
-                        <hr />
-                        <Row>
-                            <Label
-                                texto="Responsável piloto:"
-                                parametrosTamanho={label}
-                            />                
-                            <Select 
-                                inativo={!this.state.possuiPiloto}
-                                parametrosTamanho={input} 
-                                dados={this.equipeTeste} 
-                                funcao={this.setResponsavelTeste}
-                                valor={this.state.registro.responsavelTeste}
-                            />               
                         </Row>
                         <hr />
                         <Row>
@@ -157,21 +133,68 @@ class CalculadoraValidacaoForm extends Componente {
                             />
                             <Input
                                 ativo={false}
-                                valor={this.state.registro.tempoDesenvolvimento} 
+                                valor={this.state.registro.tempoDeploy} 
                                 parametrosTamanho={input}
-                            />
+                            />                            
                         </Row>
                         <hr />
                         <Row>
                             <Label
                                 texto="Responsável deploy:"
                                 parametrosTamanho={label}
-                            />        
+                            />                
                             <Select 
+                                inativo={false}
                                 parametrosTamanho={input} 
                                 dados={this.equipeDesenvolvimento} 
-                                funcao={this.setResponsavelDesenvolvimento}
-                                valor={this.state.registro.responsavelDesenvolvimento}
+                                funcao={this.setResponsavelDeploy}
+                                valor={this.state.registro.responsavelDeploy}
+                                chave={Pessoa.getChaveSelect()}
+                            />               
+                        </Row>
+                        <hr />
+                        {this.squadUsaSubtask ? 
+                            <>
+                                <Row>
+                                    <Label
+                                        texto="Demanda piloto:"
+                                        parametrosTamanho={label}
+                                    />
+                                    <Input
+                                        ativo={this.state.possuiPiloto}
+                                        valor={this.state.registro.demandaPiloto} 
+                                        parametrosTamanho={input}
+                                        inputTexto={true}
+                                        funcao={this.setRegistro}
+                                        parametrosFuncao={P_DEMANDA_PILOTO}
+                                    />
+                                </Row>
+                                <hr />
+                            </> : <></>}  
+                        <Row>
+                            <Label
+                                texto="Tempo Piloto (h):"
+                                parametrosTamanho={label}
+                            />
+                            <Input
+                                ativo={false}
+                                valor={this.state.registro.tempoPiloto} 
+                                parametrosTamanho={input}
+                            />
+                        </Row>
+                        <hr />
+                        <Row>
+                            <Label
+                                texto="Responsável piloto:"
+                                parametrosTamanho={label}
+                            />        
+                            <Select 
+                                inativo={!this.state.possuiPiloto}
+                                parametrosTamanho={input} 
+                                dados={this.equipePiloto} 
+                                funcao={this.setResponsavelPiloto}
+                                valor={this.state.registro.responsavelPiloto}
+                                chave={Pessoa.getChaveSelect()}
                             />                    
                         </Row>
                         <hr />
@@ -192,8 +215,8 @@ class CalculadoraValidacaoForm extends Componente {
                 <Row>
                     <Col sm="10"></Col>
                     <Col sm="2">
-                        <ButtonSuccess valido={this.state.registro.responsavelDesenvolvimento != null ||
-                                                this.state.registro.responsavelTeste != null} texto={"Adicionar"} funcao={this.executaFuncao}/>
+                        <ButtonSuccess valido={this.state.registro.responsavelDeploy != null ||
+                                                this.state.registro.responsavelPiloto != null} texto={"Adicionar"} funcao={this.executaFuncao}/>
                     </Col>
                 </Row>
             </Container>        

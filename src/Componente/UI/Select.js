@@ -8,16 +8,25 @@ import Option from "./Option";
 /* IMPORT GERAL */
 import Utils from "../../Geral/Utils";
 
-function executaFuncao(valor, dados, funcao) {
+function executaFuncao(valor, dados, funcao, chave) {
     var result;
     for (var i = 0; i < dados.length; i++) {
         var d = dados[i];
-        if (d.usuario == valor) {
+        if (getValorChave(d, chave, "value") == valor) {
             result = d;
             break;
         }
     }
     funcao(result);
+}
+
+function getValorChave(d, chave, p) {
+    if (Utils.isEmptyObject(chave))
+        return d;
+    else {
+        p = chave[p];
+        return d[p];
+    }
 }
 
 export default (props) => {
@@ -39,6 +48,7 @@ export default (props) => {
             ? "" 
             : props.valor
         : "";
+    var chave = props.hasOwnProperty("chave") ? props.chave : {};
 
     return (
         <>
@@ -53,13 +63,13 @@ export default (props) => {
                     <Form.Control
                         as="select"
                         custom
-                        onChange={(e) => executaFuncao(e.target.value, dados, funcao)}
+                        onChange={(e) => executaFuncao(e.target.value, dados, funcao, chave)}
                         disabled={inativo}
                         value={valor}
                         className="select"
                     >
                         <Option value={""} text={"SELECIONE"} />
-                        {dados.map((d) => <Option value={d.usuario} text={d.nome}/>)}
+                        {dados.map((d) => <Option value={getValorChave(d, chave, "value")} text={getValorChave(d, chave, "text")}/>)}
                     </Form.Control>
                 </Form>
             </Col>

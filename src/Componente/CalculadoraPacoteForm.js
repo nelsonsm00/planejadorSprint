@@ -1,45 +1,52 @@
 /* IMPORT REACT */
-import { Component } from "react";
 import { Col, Row, Form, Container } from "react-bootstrap";
 import FormCheck from 'react-bootstrap/FormCheck'
 
-
 /* IMPORT COMPONENTE */
+import ButtonSuccess from "./UI/Button/ButtonSuccess";
 import Componente from "./Arquitetura/Componente";
 import Input from "./UI/Input";
 import Label from "./UI/Label";
 import Select from "./UI/Select";
-import ButtonSuccess from "./UI/Button/ButtonSuccess";
 
 /* IMPORT GERAL */
-import Cache from "../Geral/Cache/Cache";
 import Calculadora from "../Geral/Calculadora/Calculadora";
+import Pessoa from "../Geral/Pessoa/Pessoa";
+
+/* PROPRIEDADES */
+const P_DEMANDA_PACOTE = "demandaPacote";
+const P_RESPONSAVEL_REBASE = "responsavelRebase";
+const P_TEMPO_REBASE = "tempoRebase";
+const P_DEMANDA_DOCUMENTACAO = "demandaDocumentacao";
+const P_RESPONSAVEL_DOCUMENTACAO = "responsavelDocumentacao";
+const P_TEMPO_DOCUMENTACAO = "tempoDocumentacao";
+const P_TEMPO_TOTAL = "tempoTotal";
 
 class CalculadoraPacoteForm extends Componente {   
     constructor(props) {
-        super(props);             
+        super(props);                  
         this.state.registro = this.getRegistroPadrao();
         this.state.possuiDocumentacao = true;
         this.state.possuiCompilacao = true;
-        this.equipeDesenvolvimento = Cache.equipe.get;
-        this.equipeTeste = Cache.equipe.get;
 
         this.populaEquipe();
 
-        this.setDemanda = this.setDemanda.bind(this);
-        this.setResponsavelDesenvolvimento = this.setResponsavelDesenvolvimento.bind(this);
-        this.setResponsavelTeste = this.setResponsavelTeste.bind(this);
+        this.setRegistro = this.setRegistro.bind(this);
+        this.setResponsavelRebase = this.setResponsavelRebase.bind(this);
+        this.setResponsavelDocumentacao = this.setResponsavelDocumentacao.bind(this);
         this.executaFuncao = this.executaFuncao.bind(this);
     }
 
     getRegistroPadrao() {
-        return {demanda: "AUTO-", 
-                tempoDesenvolvimento: Calculadora.getTempoRebase(), 
-                tempoTeste: Calculadora.getTempoDocumentacao(), 
-                tempoTotal: Calculadora.calculaTempoTotalPacote(true, true), 
-                responsavelDesenvolvimento: null, 
-                responsavelTeste: null
-            };
+        return {
+            demandaPacote: "AUTO-", 
+            tempoRebase: Calculadora.getTempoRebase(),
+            responsavelRebase: null,
+            demandaDocumentacao: "AUTO-",                 
+            tempoDocumentacao: Calculadora.getTempoDocumentacao(), 
+            responsavelDocumentacao: null,
+            tempoTotal: Calculadora.calculaTempoTotalPacote(true, true)               
+        };
     }
 
     populaEquipe() {
@@ -48,42 +55,36 @@ class CalculadoraPacoteForm extends Componente {
         else
             this.equipeDesenvolvimento = [];
 
-        if (this.equipeTeste != null && this.equipeTeste != undefined)
-            this.equipeTeste = this.equipeTeste.filter((e) => {return e.documentacao});
+        if (this.equipeDocumentacao != null && this.equipeDocumentacao != undefined)
+            this.equipeDocumentacao = this.equipeDocumentacao.filter((e) => {return e.documentacao});
         else
-            this.equipeTeste = [];
+            this.equipeDocumentacao = [];
     }
 
-    setDemanda(demanda) {
+    setRegistro(valor, propriedade) {
         var json = {};
         Object.assign(json, this.state.registro);
-        json.demanda = demanda;
+        json[propriedade] = valor;
         this.setState({registro: json});
     }
 
-    setResponsavelDesenvolvimento(responsavel) {
-        if (responsavel == undefined) responsavel = {usuario: null};
-        var json = {};
-        Object.assign(json, this.state.registro);
-        json.responsavelDesenvolvimento = responsavel.usuario;
-        this.setState({registro: json});
+    setResponsavelRebase(responsavel) {
+        if (responsavel == undefined) this.setRegistro(null, P_RESPONSAVEL_REBASE);
+        else this.setRegistro(responsavel.usuario, P_RESPONSAVEL_REBASE);
     }
 
-    setResponsavelTeste(responsavel) {
-        if (responsavel == undefined) responsavel = {usuario: null};
-        var json = {};
-        Object.assign(json, this.state.registro);
-        json.responsavelTeste = responsavel.usuario
-        this.setState({registro: json});
+    setResponsavelDocumentacao(responsavel) {
+        if (responsavel == undefined) this.setRegistro(null, P_RESPONSAVEL_DOCUMENTACAO);
+        else this.setRegistro(responsavel.usuario, P_RESPONSAVEL_DOCUMENTACAO);
     }
-
+ 
     setPossuiDocumentacao() {
         var possuiDocumentacao = !this.state.possuiDocumentacao;
         var json = {};
         Object.assign(json, this.state.registro);
-        json.responsavelTeste = null;
-        json.tempoTeste = possuiDocumentacao ? Calculadora.getTempoDocumentacao() : 0;
-        json.tempoTotal = Calculadora.calculaTempoTotalPacote(possuiDocumentacao, this.state.possuiCompilacao);        
+        json[P_RESPONSAVEL_DOCUMENTACAO] = null;
+        json[P_TEMPO_DOCUMENTACAO] = possuiDocumentacao ? Calculadora.getTempoDocumentacao() : 0;
+        json[P_TEMPO_TOTAL] = Calculadora.calculaTempoTotalPacote(possuiDocumentacao, this.state.possuiCompilacao);        
         this.setState({registro: json, possuiDocumentacao: possuiDocumentacao});
     }
 
@@ -91,8 +92,8 @@ class CalculadoraPacoteForm extends Componente {
         var possuiCompilacao = !this.state.possuiCompilacao;
         var json = {};
         Object.assign(json, this.state.registro);
-        json.tempoTotal = Calculadora.calculaTempoTotalPacote(this.state.possuiDocumentacao, possuiCompilacao);        
-        this.setState({registro: json, possuiCompilacao: possuiCompilacao});  
+        json[P_TEMPO_TOTAL] = Calculadora.calculaTempoTotalPacote(this.state.possuiDocumentacao, possuiCompilacao);        
+        this.setState({registro: json, possuiCompilacao: possuiCompilacao});
     }
 
     executaFuncao() {
@@ -128,15 +129,16 @@ class CalculadoraPacoteForm extends Componente {
                     <Col sm={8}>
                         <Row>
                             <Label
-                                texto="Demanda:"
+                                texto={this.squadUsaSubtask ? "Demanda pacote:" : "Demanda:"}
                                 parametrosTamanho={label}
                             />
                             <Input
                                 ativo={true}
-                                valor={this.state.registro.demanda} 
+                                valor={this.state.registro.demandaPacote} 
                                 parametrosTamanho={input}
                                 inputTexto={true}
-                                funcao={this.setDemanda}
+                                funcao={this.setRegistro}
+                                parametrosFuncao={P_DEMANDA_PACOTE}
                             />
                         </Row>
                         <hr />
@@ -147,7 +149,7 @@ class CalculadoraPacoteForm extends Componente {
                             />
                             <Input
                                 ativo={false}
-                                valor={this.state.registro.tempoDesenvolvimento} 
+                                valor={this.state.registro.tempoRebase} 
                                 parametrosTamanho={input}
                             />                            
                         </Row>
@@ -160,11 +162,30 @@ class CalculadoraPacoteForm extends Componente {
                             <Select 
                                 parametrosTamanho={input} 
                                 dados={this.equipeDesenvolvimento} 
-                                funcao={this.setResponsavelDesenvolvimento}
-                                valor={this.state.registro.responsavelDesenvolvimento}
+                                funcao={this.setResponsavelRebase}
+                                valor={this.state.registro.responsavelRebase}
+                                chave={Pessoa.getChaveSelect()}
                             />               
                         </Row>
                         <hr />
+                        {this.squadUsaSubtask ? 
+                            <>
+                                <Row>
+                                    <Label
+                                        texto="Demanda documentação:"
+                                        parametrosTamanho={label}
+                                    />
+                                    <Input
+                                        ativo={this.state.possuiDocumentacao}
+                                        valor={this.state.registro.demandaDocumentacao} 
+                                        parametrosTamanho={input}
+                                        inputTexto={true}
+                                        funcao={this.setRegistro}
+                                        parametrosFuncao={P_DEMANDA_DOCUMENTACAO}
+                                    />
+                                </Row>
+                                <hr />
+                            </> : <></>}                        
                         <Row>
                             <Label
                                 texto="Tempo Documentação (h):"
@@ -172,7 +193,7 @@ class CalculadoraPacoteForm extends Componente {
                             />
                             <Input
                                 ativo={false}
-                                valor={this.state.registro.tempoTeste} 
+                                valor={this.state.registro.tempoDocumentacao} 
                                 parametrosTamanho={input}
                             />
                         </Row>
@@ -185,9 +206,10 @@ class CalculadoraPacoteForm extends Componente {
                             <Select 
                                 inativo={!this.state.possuiDocumentacao}
                                 parametrosTamanho={input} 
-                                dados={this.equipeTeste} 
-                                funcao={this.setResponsavelTeste}
-                                valor={this.state.registro.responsavelTeste}
+                                dados={this.equipeDocumentacao} 
+                                funcao={this.setResponsavelDocumentacao}
+                                valor={this.state.registro.responsavelDocumentacao}
+                                chave={Pessoa.getChaveSelect()}
                             />                    
                         </Row>
                         <hr />
@@ -208,8 +230,8 @@ class CalculadoraPacoteForm extends Componente {
                 <Row>
                     <Col sm="10"></Col>
                     <Col sm="2">
-                        <ButtonSuccess valido={this.state.registro.responsavelDesenvolvimento != null ||
-                                                this.state.registro.responsavelTeste != null} texto={"Adicionar"} funcao={this.executaFuncao}/>
+                        <ButtonSuccess valido={this.state.registro.responsavelRebase != null ||
+                                                this.state.registro.responsavelDocumentacao != null} texto={"Adicionar"} funcao={this.executaFuncao}/>
                     </Col>
                 </Row>
             </Container>        

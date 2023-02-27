@@ -55,15 +55,45 @@ class Utils {
                 if (params.hasOwnProperty("input")) {
                     switch (tipo) {
                         case "xs":
-                            return 2;
+                            return 4;
                         case "sm":
-                            return 2;
+                            return 4;
                         case "md":
-                            return 2;
+                            return 4;
                         case "lg":
-                            return 2;
+                            return 4;
                         case "xl":
-                            return 2;
+                            return 4;
+                    }
+                }
+                else if (params.hasOwnProperty("label")) {
+                    switch (tipo) {
+                        case "xs":
+                            return 1;
+                        case "sm":
+                            return 1;
+                        case "md":
+                            return 1;
+                        case "lg":
+                            return 1;
+                        case "xl":
+                            return 1;
+                    }
+                }
+            }
+            else if (params.hasOwnProperty("gerenciamentoSquad")) {
+                if (params.hasOwnProperty("input")) {
+                    switch (tipo) {
+                        case "xs":
+                            return 4;
+                        case "sm":
+                            return 4;
+                        case "md":
+                            return 4;
+                        case "lg":
+                            return 4;
+                        case "xl":
+                            return 4;
                     }
                 }
                 else if (params.hasOwnProperty("label")) {
